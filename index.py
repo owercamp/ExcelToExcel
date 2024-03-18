@@ -25,16 +25,30 @@ print(f"El documento seleccionado es: {destiny}")
 origin_book = pd.ExcelFile(origin)
 destiny_book = pd.ExcelFile(destiny)
 
-sheets_book = origin_book.sheet_names
+sheets_book_origin = origin_book.sheet_names
+sheets_book_destiny = destiny_book.sheet_names
 
-for sheet in sheets_book:
+
+model_origin = Workers.worker()
+for sheet in sheets_book_origin:
     if sheet == "EMO":
-        data = pd.DataFrame(pd.read_excel(origin, sheet_name=sheet))
-        for item in data.columns:
-            if item in Workers.worker.keys():
-                Workers.info(item, data.columns.get_loc(item))
+        data_origin = pd.DataFrame(pd.read_excel(origin, sheet_name=sheet))
+        for item in data_origin.columns:
+            model_origin.info(item, data_origin.columns.get_loc(item))
 
 
-myDictionary = Workers.worker
+model_destiny = Workers.worker()
+for sheet in sheets_book_destiny:
+    if sheet == "TRABAJADORES":
+        data_destiny = pd.DataFrame(pd.read_excel(destiny, sheet_name=sheet, header=3))
+        for item in data_destiny.columns:
+            model_destiny.info(item, data_destiny.columns.get_loc(item))
 
-print(myDictionary)
+
+print("Modelo de origen:")
+print(f"CONTRATO ORIGEN: {model_origin.dict_worker['NOMBRE CONTRATO']}")
+print(model_origin.dict_worker)
+print("")
+print("Modelo de destino:")
+print(f"CONTRATO DESTINO: {model_destiny.dict_worker['NOMBRE CONTRATO']}")
+print(model_destiny.dict_worker)
